@@ -3,7 +3,7 @@
         <div>
             <TopNavbar />
         </div>
-        <div>
+        <div class="m-auto">
         <slot />
         </div>
     </div>

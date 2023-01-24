@@ -1,15 +1,20 @@
 <template>
-    <div>
-        <h1>hi</h1>
-        <h1 @click="printAuth">Auth</h1>
+    <div class="flex mx-5 gap-10">
+        <div class="flex-grow min-w-[450px] max-w-[700px]" id="posts">
+            <div>
+                <PostCard postId = "deeZnuTs"/>
+            </div>
+        </div>
+        <div class="flex-shrink min-w-[320px] m-auto hidden md:block h-20" id="sidebar">
+            <Advertisement />
+        </div>
     </div>
 </template>
 
 <script setup>
     
 const printAuth = () => {
-    const auth = getAuth()
-    
+    console.log(auth)
 }
 </script>
 
