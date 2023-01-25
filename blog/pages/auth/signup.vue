@@ -41,7 +41,7 @@
 const isSignUp = ref(false);
 const email = ref("");
 const password = ref("");
-const auth = getAuth()
+const auth = myAuth()
 
 const login = () => {
     console.log('login Run')
@@ -93,7 +93,6 @@ const usePasswordSignIn = () => {
 };
 
 const usePasswordCreateAccount = () => {
-    console.log('hi')
     createUserWithEmailAndPassword(auth, email.value, password.value)
         .then((userCredential) => {
             // Signed in

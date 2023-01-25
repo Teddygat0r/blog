@@ -1,37 +1,41 @@
 <template>
-    <div class="flex bg-slate-600 py-12 text-slate-100 justify-between">
-        <h1 class="ml-8 text-3xl">Racketeer</h1>
-        <ul class="flex space-x-4 mr-8 text-lg" v-if="authLoaded">
+    <div class="flex bg-slate-600 py-8 text-slate-100 justify-between">
+        <h1 class="ml-8 text-3xl"><NuxtLink to="/">Racketeer</NuxtLink></h1>
+        <ul class="flex space-x-4 mr-8 text-lg" v-if="loaded">
             <li><a href="#">About</a></li>
             <li>
-                <span v-if="checkUser()">
+                <span v-if="authUser">
                     <a href="#">Posts</a>
                 </span>
                 <span v-else>
-                    <a href="#">Sign Up</a>
+                    <NuxtLink to="/auth/signup">Sign Up</NuxtLink>
                 </span>
             </li>
             <li>
-                <span v-if="checkUser()">
-                    <a href="#">Me</a>
+                <span v-if="authUser">
+                    <NuxtLink to="/auth/logout">Log Out</NuxtLink>
                 </span>
                 <span v-else>
-                    <a href="#">Log In</a>
+                    <NuxtLink to="/auth/signup">Log In</NuxtLink>
                 </span>
                 
             </li>
-            <h1 @click="checkUser()">Check Auth</h1>
+            <h1 @click="">Check Auth</h1>
         </ul>
     </div>
 </template>
 
 <script setup>
-    const auth = getAuth()
+    const auth = myAuth()
+    const authUser = ref(null)
+    const loaded = ref(false)
 
-    const checkUser = () => {
-        console.log(auth.currentUser)
-        return auth.currentUser != null
-    }
+    onAuthStateChanged(auth, (user) => {
+        loaded.value = true
+        if(user){
+            authUser.value = true
+        }
+    })
 
 </script>
 

@@ -1,16 +1,17 @@
 <template>
-    <div>
-        Signed Out
-    </div>
+    <div>Signed Out</div>
 </template>
 
 <script setup>
-    onMounted(() => {
-        useSignOutUser()
-        window.location.href="/"
-    })
+const auth = myAuth()
+const useSignOutUser = async () => {
+    const result = await auth.signOut()
+    return result
+}
+onMounted(() => {
+    useSignOutUser()
+    window.location.href = "/"
+})
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
