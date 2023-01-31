@@ -1,9 +1,7 @@
 <template>
     <div class="flex h-screen">
         <div class="m-auto flex flex-col">
-            <form
-                @submit.prevent="login()"
-                class="flex flex-col gap-2 mt-16">
+            <form @submit.prevent="login()" class="flex flex-col gap-2 mt-16">
                 <input
                     type="email"
                     placeholder="Email"
@@ -37,20 +35,17 @@
 </template>
 
 <script setup>
+import { GoogleAuthProvider, getAdditionalUserInfo } from "@firebase/auth";
 
 const isSignUp = ref(false);
 const email = ref("");
 const password = ref("");
-const auth = myAuth()
+const auth = myAuth();
 
 const login = () => {
-    console.log('login Run')
-    console.log(isSignUp.value)
     if (!isSignUp.value) {
-        console.log('sign in')
         usePasswordSignIn();
     } else {
-        console.log('create account')
         usePasswordCreateAccount();
     }
 };
@@ -59,13 +54,12 @@ const getCurrentUser = () => {
 };
 
 const useGoogleSignIn = () => {
-    return signInWithPopup(auth, provider)
+    return signInWithPopup(auth, getProvider())
         .then((result) => {
             // This gives you a Google Access Token. You can use it to access the Google API.
             const credential = GoogleAuthProvider.credentialFromResult(result);
             const token = credential.accessToken;
-            // The signed-in user info.
-            const user = result.user;
+            createUserObjectIfNotExists(result);
             // ...
         })
         .catch((error) => {
@@ -73,9 +67,7 @@ const useGoogleSignIn = () => {
             const errorCode = error.code;
             const errorMessage = error.message;
             // The email of the user's account used.
-            const email = error.customData.email;
-            // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
+            console.log(errorCode, " => ", errorMessage);
             // ...
         });
 };
@@ -109,6 +101,16 @@ const usePasswordCreateAccount = () => {
 const useSignOutUser = async () => {
     const result = await auth.signOut();
     return result;
+};
+
+const createUserObjectIfNotExists = async (result) => {
+    const { isNewUser } = getAdditionalUserInfo(result);
+    if (isNewUser) {
+        await setDoc(doc(myDb(), "users", result.user.uid), {
+            username: result.user.displayName,
+            email: result.user.email,
+        });
+    }
 };
 </script>
 

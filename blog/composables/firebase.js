@@ -6,6 +6,9 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
 } from "firebase/auth";
+
+import { getFirestore, collection, query, where, doc, setDoc, getDoc, getDocs, updateDoc } from "firebase/firestore";
+
 import { initializeApp } from "firebase/app";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -25,8 +28,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const auth = getAuth()
 const myAuth = () => { return auth }
-
+const db = getFirestore(app)
+const myDb = () => { return db }
 const provider = new GoogleAuthProvider()
+const getProvider = () => { return provider }
 
+export { app, getProvider, myAuth, signInWithEmailAndPassword, signInWithPopup, onAuthStateChanged, createUserWithEmailAndPassword};
 
-export { app, provider, myAuth, signInWithEmailAndPassword, signInWithPopup, onAuthStateChanged, createUserWithEmailAndPassword};
+export { myDb, collection, query, where, doc, setDoc, getDoc, getDocs, updateDoc }
