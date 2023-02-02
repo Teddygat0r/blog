@@ -2,7 +2,7 @@
     <div class="flex mx-5 gap-10">
         <div class="flex-grow min-w-[450px] max-w-[700px]" id="posts">
             <div class="w-full">
-                <PostCard v-for="post in postObjects" v-bind="post">
+                <PostCard v-for="post in postObjects" v-bind="post" :key="post.id">
                     <p>{{ post }}</p>
                 </PostCard>
             </div>
@@ -19,9 +19,8 @@
 
 const postObjects = ref([])
 
-//const q = query(collection(myDb(), "posts"))
-
 onMounted(async () => {    
+    const q = query(collection(myDb(), "posts"))
     const querySnapshot = await getDocs(q)
     
     let fbPosts = []

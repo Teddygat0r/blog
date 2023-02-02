@@ -109,6 +109,7 @@ const createUserObjectIfNotExists = async (result) => {
         await setDoc(doc(myDb(), "users", result.user.uid), {
             username: result.user.displayName,
             email: result.user.email,
+            liked_posts: [],
         });
     }
 };

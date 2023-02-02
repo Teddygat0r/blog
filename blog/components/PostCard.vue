@@ -30,7 +30,7 @@
                         <span class="font-extrabold text-lg">·</span>
                     </div>
                     <div class="my-auto">
-                        <p>{{ timeDiff() }}</p>
+                        <p>{{ timeDiff(props.date) }}</p>
                     </div>
                 </div>
             </div>
@@ -39,13 +39,18 @@
             <img :src="props.image_link" alt="" class="h-16 w-16 mx-auto" />
             <div
                 class="flex-none px-2 mx-auto rounded-md border-solid border border-slate-400">
-                <p v-if="game" class="text-sm text-slate-700">{{ game.name }}</p>
+                <p v-if="game" class="text-sm text-slate-700">
+                    {{ game.name }}
+                </p>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
+import { arrayUnion, arrayRemove } from '@firebase/firestore';
+
+
 const liked = ref(false);
 const user = myAuth().currentUser;
 const props = defineProps({
@@ -56,67 +61,73 @@ const props = defineProps({
     likes: Number,
     comment_count: Number,
     image_link: String,
-    uuid: String,
+    id: String,
 });
 
-const game = ref(null)
-const likes = ref(props.likes)
-const postsRef = collection(myDb(), "posts")
+const game = ref(null);
+const likes = ref(props.likes);
+const postsRef = collection(myDb(), "posts");
 
-const timeDiff = () => {
+const timeDiff = (date) => {
     const currentDate = Date.now();
-    if (currentDate - props.date < 60000) {
+    if (currentDate - date < 60000) {
         //Milliseconds in Min
-        const seconds = parseInt((currentDate - props.date) / 1000);
+        const seconds = parseInt((currentDate - date) / 1000);
         return `${seconds} seconds ago`;
-    } else if (currentDate - props.date < 3600000) {
+    } else if (currentDate - date < 3600000) {
         //Milliseconds in Hr
-        const minutes = parseInt((currentDate - props.date) / 60000);
+        const minutes = parseInt((currentDate - date) / 60000);
         return `${minutes} minutes ago`;
-    } else if (currentDate - props.date < 86400000) {
+    } else if (currentDate - date < 86400000) {
         //Milliseconds in Day
-        const hours = parseInt((currentDate - props.date) / 3600000);
+        const hours = parseInt((currentDate - date) / 3600000);
         return `${hours} hours ago`;
     } else {
-        const publishDate = new Date(props.date);
+        const publishDate = new Date(date);
         return `${publishDate.toLocaleString("en-US", {
             month: "short",
         })} ${publishDate.getDate()}, ${publishDate.getFullYear()}`;
     }
-};
+}
 
 const fetchLiked = async () => {
     if (user) {
-        
-    }
-};
-
-const like = () => {
-    if (user) {
-        liked.value = !liked.value
-        if (liked.value) {
-            likes.value += 1
-        } else {
-            likes.value -= 1
+        const q = await getDoc(new doc(myDb(), "users", user.uid));
+        if (q.data().liked_posts.map((x) => x.id).includes(props.id)) {
+            liked.value = true;
         }
-
-        updateDoc(doc(postsRef, props.uuid), {
-            likes: likes.value
-        })
-
-    } else {
-        alert("log in!")
     }
 }
 
-onMounted(async () => {
-    const q = await getDoc(props.game)
-    if(q.exists()){
-        game.value = q.data()
+const like = () => {
+    if (user) {
+        liked.value = !liked.value;
+        if (liked.value) {
+            likes.value += 1;
+            updateDoc(doc(myDb(), "users", user.uid), {
+                liked_posts: arrayUnion(doc(myDb(), "posts", props.id))
+            })
+        } else {
+            likes.value -= 1;
+            updateDoc(doc(myDb(), "users", user.uid), {
+                liked_posts: arrayRemove(doc(myDb(), "posts", props.id))
+            })
+        }
+        updateDoc(doc(postsRef, props.id), {
+            likes: likes.value,
+        })
+    } else {
+        alert("log in!");
     }
-})
+};
 
-
+onMounted(async () => {
+    const q = await getDoc(props.game);
+    if (q.exists()) {
+        game.value = q.data();
+    }
+    fetchLiked()
+});
 </script>
 
 <style scoped>
