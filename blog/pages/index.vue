@@ -25,9 +25,12 @@ onMounted(async () => {
     
     let fbPosts = []
     querySnapshot.forEach(async (doc) => {
-        const docData = await postConverter.fromFirestore(doc)
+        const docData = postConverter.fromFirestore(doc)
         fbPosts.push(docData)
     })
+
+    fbPosts.sort((a, b) => {return (a.date > b.date) ? -1 : ((b.date > a.date) ? 1 : 0)})
+
     postObjects.value = fbPosts
 })
 

@@ -4,75 +4,87 @@
         v-if="editor">
         <div class="flex">
             <div class="m-auto flex gap-5 mt-2" id="Fixed Menu">
-            <button
-                @click="editor.chain().focus().toggleBold().run()"
-                :class="{ 'is-active': editor.isActive('bold') }">
-                <i class="ri-bold"></i>
-            </button>
-            <button
-                @click="editor.chain().focus().toggleItalic().run()"
-                :class="{ 'is-active': editor.isActive('italic') }">
-                <i class="ri-italic"></i>
-            </button>
-            <button
-                @click="editor.chain().focus().toggleUnderline().run()"
-                :class="{ 'is-active': editor.isActive('underline') }">
-                <i class="ri-underline"></i>
-            </button>
-            <button
-                @click="setLink()"
-                :class="{ 'is-active': editor.isActive('link') }">
-                <i class="ri-links-line"></i>
-            </button>
-            <button
-                @click="editor.chain().focus().toggleBlockquote().run()"
-                :class="{ 'is-active': editor.isActive('blockquote') }">
-                <i class="ri-chat-quote-line"></i>
-            </button>
-            <button
-                @click="editor.chain().focus().toggleBulletList().run()"
-                :class="{ 'is-active': editor.isActive('bulletList') }">
-                <i class="ri-list-unordered"></i>
-            </button>
-            <button
-                @click="editor.chain().focus().toggleOrderedList().run()"
-                :class="{ 'is-active': editor.isActive('orderedList') }">
-                <i class="ri-list-ordered"></i>
-            </button>
-            <button @click="editor.chain().focus().setHorizontalRule().run()">
-                <i class="ri-separator"></i>
-            </button>
-            <button @click="addImage()">
-                <i class="ri-image-2-line"></i>
-            </button>
-            <button
-                @click="editor.chain().focus().setTextAlign('left').run()"
-                :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }">
-                <i class="ri-align-left"></i>
-            </button>
-            <button
-                @click="editor.chain().focus().setTextAlign('center').run()"
-                :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }">
-                <i class="ri-align-center"></i>
-            </button>
-            <button
-                @click="editor.chain().focus().setTextAlign('right').run()"
-                :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }">
-                <i class="ri-align-right"></i>
-            </button>
-            <button
-                @click="editor.chain().focus().setTextAlign('justify').run()"
-                :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }">
-                <i class="ri-align-justify"></i>
-            </button>
-            <button
-                @click="addVideo()">
-                <i class="ri-youtube-line"></i>
-            </button>
+                <button
+                    @click="editor.chain().focus().toggleBold().run()"
+                    :class="{ 'is-active': editor.isActive('bold') }">
+                    <i class="ri-bold"></i>
+                </button>
+                <button
+                    @click="editor.chain().focus().toggleItalic().run()"
+                    :class="{ 'is-active': editor.isActive('italic') }">
+                    <i class="ri-italic"></i>
+                </button>
+                <button
+                    @click="editor.chain().focus().toggleUnderline().run()"
+                    :class="{ 'is-active': editor.isActive('underline') }">
+                    <i class="ri-underline"></i>
+                </button>
+                <button
+                    @click="setLink()"
+                    :class="{ 'is-active': editor.isActive('link') }">
+                    <i class="ri-links-line"></i>
+                </button>
+                <button
+                    @click="editor.chain().focus().toggleBlockquote().run()"
+                    :class="{ 'is-active': editor.isActive('blockquote') }">
+                    <i class="ri-chat-quote-line"></i>
+                </button>
+                <button
+                    @click="editor.chain().focus().toggleBulletList().run()"
+                    :class="{ 'is-active': editor.isActive('bulletList') }">
+                    <i class="ri-list-unordered"></i>
+                </button>
+                <button
+                    @click="editor.chain().focus().toggleOrderedList().run()"
+                    :class="{ 'is-active': editor.isActive('orderedList') }">
+                    <i class="ri-list-ordered"></i>
+                </button>
+                <button
+                    @click="editor.chain().focus().setHorizontalRule().run()">
+                    <i class="ri-separator"></i>
+                </button>
+                <button @click="addImage()">
+                    <i class="ri-image-2-line"></i>
+                </button>
+                <button
+                    @click="editor.chain().focus().setTextAlign('left').run()"
+                    :class="{
+                        'is-active': editor.isActive({ textAlign: 'left' }),
+                    }">
+                    <i class="ri-align-left"></i>
+                </button>
+                <button
+                    @click="editor.chain().focus().setTextAlign('center').run()"
+                    :class="{
+                        'is-active': editor.isActive({ textAlign: 'center' }),
+                    }">
+                    <i class="ri-align-center"></i>
+                </button>
+                <button
+                    @click="editor.chain().focus().setTextAlign('right').run()"
+                    :class="{
+                        'is-active': editor.isActive({ textAlign: 'right' }),
+                    }">
+                    <i class="ri-align-right"></i>
+                </button>
+                <button
+                    @click="
+                        editor.chain().focus().setTextAlign('justify').run()
+                    "
+                    :class="{
+                        'is-active': editor.isActive({ textAlign: 'justify' }),
+                    }">
+                    <i class="ri-align-justify"></i>
+                </button>
+                <button @click="addVideo()">
+                    <i class="ri-youtube-line"></i>
+                </button>
+            </div>
         </div>
-        </div>
-        <div class="bg-slate-50 min-h-[500px] w-full rounded-sm">
-            <editor-content :editor="editor" class="m-auto h-full w-full"/>
+        <div
+            class="bg-slate-50 min-h-[300px] w-full rounded-sm cursor-text"
+            @click="editor.commands.focus('end')">
+            <editor-content :editor="editor" class="m-auto h-full w-full" />
         </div>
     </div>
     <div
@@ -94,6 +106,8 @@ import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
 import Youtube from "@tiptap/extension-youtube";
+
+const emit = defineEmits(['update:modelValue'])
 
 const editor = useEditor({
     content: null,
@@ -126,18 +140,21 @@ const editor = useEditor({
         Link,
         Placeholder.configure({
             emptyEditorClass:
-            'first:before:text-gray-400 first:before:float-left first:before:content-[attr(data-placeholder)] first:before:pointer-events-none first:before:h-0',
+                "first:before:text-gray-400 first:before:float-left first:before:content-[attr(data-placeholder)] first:before:pointer-events-none first:before:h-0",
         }),
         TextAlign.configure({
-            types: ['heading', 'paragraph']
+            types: ["heading", "paragraph"],
         }),
         Underline,
         Youtube,
     ],
     editorProps: {
         attributes: {
-            class: 'prose mx-5 my-1 focus:outline-none'
-        }
+            class: "prose mx-5 my-1 focus:outline-none",
+        },
+    },
+    onUpdate: ({ editor }) => {
+        emit('update:modelValue', editor.getHTML())
     }
 });
 
@@ -171,12 +188,12 @@ const addImage = () => {
 };
 
 const addVideo = () => {
-    const url = window.prompt("URL")
+    const url = window.prompt("URL");
 
     editor.value.commands.setYoutubeVideo({
         src: url,
-    })
-}
+    });
+};
 
 onMounted(() => {});
 </script>
@@ -185,6 +202,4 @@ onMounted(() => {});
 .is-active {
     color: red;
 }
-
-
 </style>

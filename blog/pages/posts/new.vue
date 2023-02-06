@@ -1,14 +1,143 @@
 <template>
-    <div class="flex flex-col gap-2 mx-auto my-4 w-[700px] container">
-        <TipTapPostTitle />
-        <TipTapPostEditor />
+    <div class="w-[700px]">
+        <div class="flex flex-col gap-2 mx-auto my-4">
+            <input
+                placeholder="Enter the Title"
+                class="w-full rounded-md p-2 text-2xl" maxLength="120"
+                v-model="postTitle" />
+            <input
+                placeholder="Your summary"
+                class="w-full rounded-md p-2" maxLength="240"
+                v-model="postSummary" />
+            
+            <TipTapPostEditor v-model="postBody" />
+        </div>
+        <div class="w-full mx-auto mb-4">
+            <input
+                placeholder="Image url"
+                class="w-full rounded-md p-2"
+                v-model="image_link" />
+        </div>
+        <div class="flex justify-between container w-full">
+            <input
+                class="my-auto px-2 py-2 rounded-md"
+                v-model="game"
+                id="autoComplete"
+                type="search"
+                dir="ltr"
+                spellcheck="false"
+                autocorrect="off"
+                autocomplete="off"
+                autocapitalize="off"
+                placeholder="Enter your game" />
+
+            <button
+                class="text-white bg-cyan-600 px-5 py-2 rounded-lg hover:ring-2 transition ease-in-out"
+                @click="publishPost()">
+                Publish!
+            </button>
+        </div>
     </div>
 </template>
 
 <script setup>
+import { Timestamp, addDoc } from "@firebase/firestore";
+import autoComplete from "@tarekraafat/autocomplete.js";
+import sanitizeHtml from "sanitize-html";
 
+const gamesList = ref([]);
+const game = ref("");
+const image_link = ref("");
+
+const postTitle = ref("");
+const postSummary = ref("");
+const postBody = ref("");
+
+const testFunction = async () => {
+    console.log(await validation());
+};
+
+const fetchGames = async () => {
+    const q = query(collection(myDb(), "games"));
+    const querySnapshot = await getDocs(q);
+
+    let lst = [];
+    let names = [];
+    querySnapshot.forEach(async (doc) => {
+        lst.push(doc);
+        names.push(doc.data().name);
+    });
+    gamesList.value = lst;
+    return names;
+};
+
+const setPostGame = async () => {
+    //Gets index of the game with your game name excluding case
+    const index = gamesList.value
+        .map((fbGame) => fbGame.data.name.toLowerCase())
+        .indexOf(game.value.toLowerCase());
+
+    //Creates new game if the set game doesn't exist
+    if (index === -1) {
+        const newGameRef = doc(collection(myDb(), "games"));
+
+        await setDoc(newGameRef, {
+            name: game.value,
+            link: `/games/${game.value.toLowerCase()}`,
+        });
+
+        return newGameRef;
+    }
+
+    return gamesList.value[index];
+};
+
+const validation = async () => {
+    var res = await fetch(image_link.value);
+    const buff = await res.blob();
+    return buff.type.startsWith("image/");
+};
+
+const publishPost = async () => {
+    if (await validation()) {
+        await addDoc(collection(myDb(), "posts"), {
+            author: doc(myDb(), "users", myAuth().currentUser.uid),
+            comment_count: 0,
+            content: sanitizeHtml(postBody.value),
+            date: Timestamp.fromMillis(Date.now()),
+            game: await setPostGame(),
+            image_link: image_link.value,
+            likes: 0,
+            summary: sanitizeHtml(postSummary.value),
+            title: sanitizeHtml(postTitle.value),
+        });
+
+        navigateTo('/')
+    }
+};
+
+onMounted(async () => {
+    const auto = new autoComplete({
+        placeHolder: "Search for Game",
+        data: {
+            src: await fetchGames(),
+            cache: true,
+        },
+        resultItem: {
+            highlight: true,
+        },
+        events: {
+            input: {
+                selection: (event) => {
+                    const selection = event.detail.selection.value;
+                    auto.input.value = selection;
+                    game.value = selection;
+                },
+            },
+        },
+    });
+    await fetchGames();
+});
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -21,7 +21,7 @@ export const postConverter = {
 
     },
 
-    fromFirestore: async (snapshot, options) => {
+    fromFirestore: (snapshot, options) => {
         const data = snapshot.data(options)
         return new Post(data.title, data.summary, data.content, data.game, data.date.seconds * 1000, data.likes, data.comment_count, data.image_link, snapshot.id )
     }

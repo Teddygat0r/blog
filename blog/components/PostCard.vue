@@ -9,7 +9,7 @@
                     favorite
                 </span>
             </button>
-            <p>{{ likes }}</p>
+            <p class="mx-auto">{{ likes }}</p>
         </div>
         <div class="m-auto pl-2 ml-2 border-solid border-l-slate-300 border-2">
             <h2 class="font-bold text-2xl tracking-wide px-2">
