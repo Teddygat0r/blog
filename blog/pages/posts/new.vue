@@ -3,13 +3,15 @@
         <div class="flex flex-col gap-2 mx-auto my-4">
             <input
                 placeholder="Enter the Title"
-                class="w-full rounded-md p-2 text-2xl" maxLength="120"
+                class="w-full rounded-md p-2 text-2xl"
+                maxLength="120"
                 v-model="postTitle" />
             <input
                 placeholder="Your summary"
-                class="w-full rounded-md p-2" maxLength="240"
+                class="w-full rounded-md p-2"
+                maxLength="240"
                 v-model="postSummary" />
-            
+
             <TipTapPostEditor v-model="postBody" />
         </div>
         <div class="w-full mx-auto mb-4">
@@ -54,7 +56,7 @@ const postSummary = ref("");
 const postBody = ref("");
 
 const testFunction = async () => {
-    console.log(await validation());
+    setPostGame()
 };
 
 const fetchGames = async () => {
@@ -74,7 +76,7 @@ const fetchGames = async () => {
 const setPostGame = async () => {
     //Gets index of the game with your game name excluding case
     const index = gamesList.value
-        .map((fbGame) => fbGame.data.name.toLowerCase())
+        .map((fbGame) => fbGame.data().name.toLowerCase())
         .indexOf(game.value.toLowerCase());
 
     //Creates new game if the set game doesn't exist
@@ -89,13 +91,33 @@ const setPostGame = async () => {
         return newGameRef;
     }
 
-    return gamesList.value[index];
+    return doc(collection(myDb(), "games"), gamesList.value[index].id);
 };
 
 const validation = async () => {
-    var res = await fetch(image_link.value);
+    let validated = true;
+
+    let res = await fetch(image_link.value, { mode: "no-cors" });
     const buff = await res.blob();
-    return buff.type.startsWith("image/");
+    if (!buff.type.startsWith("image/")) {
+        alert("Link doesn't lead to a valid URL!");
+    }
+
+    if (game.value === "") {
+        alert("Game is empty!");
+        validated = false;
+    }
+
+    if (postTitle.value === "") {
+        alert("Title is empty!");
+        validated = false;
+    }
+    if (postSummary.value === "") {
+        alert("Summary is empty!");
+        validated = false;
+    }
+
+    return validated;
 };
 
 const publishPost = async () => {
@@ -112,7 +134,7 @@ const publishPost = async () => {
             title: sanitizeHtml(postTitle.value),
         });
 
-        navigateTo('/')
+        navigateTo("/");
     }
 };
 
