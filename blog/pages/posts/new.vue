@@ -85,7 +85,7 @@ const setPostGame = async () => {
 
         await setDoc(newGameRef, {
             name: game.value,
-            link: `/games/${game.value.toLowerCase()}`,
+            link: `/games/${ game.value.toLowerCase().replaceAll(" ", "_") }`,
         });
 
         return newGameRef;
@@ -116,7 +116,8 @@ const validation = async () => {
         alert("Summary is empty!");
         validated = false;
     }
-
+    console.log(postBody.value)
+    console.log(sanitizeHtml(postBody.value))
     return validated;
 };
 

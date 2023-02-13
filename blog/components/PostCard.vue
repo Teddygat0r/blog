@@ -12,7 +12,10 @@
             <p class="mx-auto">{{ likes }}</p>
         </div>
         <div class="m-auto pl-2 ml-2 border-solid border-l-slate-300 border-2">
-            <h2 class="font-bold text-2xl tracking-wide px-2">
+            <NuxtLink v-if="game" class="font-bold text-2xl tracking-wide px-2" :href="`/games/${ game.name }/${ props.id }`">
+                {{ props.title }}
+            </NuxtLink>
+            <h2 v-else class="font-bold text-2xl tracking-wide px-2">
                 {{ props.title }}
             </h2>
             <div class="flex gap-3 justify-between" id="content">
@@ -37,12 +40,12 @@
         </div>
         <div class="flex flex-col gap-1 h-full">
             <img :src="props.image_link" alt="" class="h-16 w-16 mx-auto" />
-            <div
+            <NuxtLink v-if="game" :href="`/games/${ game.name }`"
                 class="flex-none px-2 mx-auto rounded-md border-solid border border-slate-400">
-                <p v-if="game" class="text-sm text-slate-700">
+                <p class="text-sm text-slate-700">
                     {{ game.name }}
                 </p>
-            </div>
+            </NuxtLink>
         </div>
     </div>
 </template>

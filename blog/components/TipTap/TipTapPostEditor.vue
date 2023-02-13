@@ -82,9 +82,8 @@
             </div>
         </div>
         <div
-            class="bg-slate-50 min-h-[300px] w-full rounded-sm cursor-text"
-            @click="editor.commands.focus('end')">
-            <editor-content :editor="editor" class="m-auto h-full w-full" />
+            class="bg-slate-50 min-h-[300px] w-full rounded-sm cursor-text">
+            <editor-content :editor="editor" class="m-auto h-full w-full"/>
         </div>
     </div>
     <div

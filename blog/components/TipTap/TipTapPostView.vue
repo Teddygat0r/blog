@@ -6,11 +6,8 @@
 
 <script setup>
 
-const { gameName } = useRoute().params
-const fbgame = ref({})
-
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 </style>

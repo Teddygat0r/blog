@@ -1,18 +1,14 @@
 <template>
-    <div class="flex flex-col w-screen">
+    <div class="flex w-full flex-col">
         <div>
             <TopNavbar />
         </div>
-        <div class="m-auto">
-        <slot />
+        <div class="">
+            <slot />
         </div>
     </div>
 </template>
 
-<script setup>
+<script setup></script>
 
-</script>
-
-<style scoped>
-
-</style>
+<style scoped></style>
