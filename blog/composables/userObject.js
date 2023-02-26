@@ -1,9 +1,11 @@
 
 class User {
-    constructor (email, liked_posts, username, id) {
+    constructor (about, email, liked_posts, profile_picture, username, id) {
         this.email = email
         this.liked_posts = liked_posts
+        this.profile_picture = profile_picture
         this.username = username
+        this.about = about
         this.id = id
     }
     toString() {
@@ -18,6 +20,6 @@ export const userConverter = {
 
     fromFirestore: (snapshot, options) => {
         const data = snapshot.data(options)
-        return new User(data.email, data.liked_posts, data.username, snapshot.id )
+        return new User(data.about, data.email, data.liked_posts, data.profile_picture, data.username, snapshot.id )
     }
 }

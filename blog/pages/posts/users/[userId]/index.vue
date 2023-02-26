@@ -11,6 +11,7 @@
         <div class="m-auto flex gap-10">
             <div class="min-w-[450px] max-w-[700px] flex-grow" id="posts">
                 <div class="w-full">
+                    <NewPostCard :uuid=userId></NewPostCard>
                     <PostCard
                         v-for="post in postObjects"
                         v-bind="post"
@@ -20,8 +21,9 @@
                 </div>
             </div>
             <div
-                class="hidden h-20 w-[150px] flex-shrink md:block"
+                class="hidden h-20 w-[200px] flex-shrink md:block"
                 id="sidebar">
+                <UserSidebar v-if="userObject" v-bind="userObject" @updateProfile="updateUserProfile"/>
                 <Advertisement />
             </div>
         </div>
@@ -34,6 +36,19 @@ import { query, orderBy, limit } from "firebase/firestore";
 const { userId } = useRoute().params;
 const userObject = ref(null);
 const postObjects = ref({});
+
+const updateUserProfile = async () => {
+    const userRef = new doc(myDb(), `users/${userId}`);
+    const fbPost = await getDoc(userRef);
+    if (fbPost.data() == null){
+        throw createError({
+            statusCode: 404,
+            statusMessage: "User not Found",
+            fatal: true,
+        });
+    }
+    userObject.value = userConverter.fromFirestore(fbPost)
+}
 
 onMounted(async () => {
     const userRef = new doc(myDb(), `users/${userId}`);
@@ -71,7 +86,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-div {
+.div {
     background-color: rgba(0, 255, 0, 0.1);
     outline-color: rgba(255, 0, 0, 0.5);
     outline-width: thin;

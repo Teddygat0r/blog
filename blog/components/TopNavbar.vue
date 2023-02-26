@@ -1,11 +1,11 @@
 <template>
-    <div class="flex bg-slate-600 py-8 text-slate-100 justify-between">
+    <div class="flex bg-slate-600 py-4 text-slate-100 justify-between">
         <h1 class="ml-8 text-3xl"><NuxtLink to="/">Racketeer</NuxtLink></h1>
         <ul class="flex space-x-4 mr-8 text-lg" v-if="loaded">
             <li><a href="#">About</a></li>
             <li>
                 <span v-if="authUser">
-                    <a href="#">Posts</a>
+                    <NuxtLink :href="`/posts/users/${ myAuth().currentUser.uid }`">Posts</NuxtLink>
                 </span>
                 <span v-else>
                     <NuxtLink to="/auth/signup">Sign Up</NuxtLink>
@@ -17,10 +17,8 @@
                 </span>
                 <span v-else>
                     <NuxtLink to="/auth/signup">Log In</NuxtLink>
-                </span>
-                
+                </span>   
             </li>
-            <h1 @click="">Check Auth</h1>
         </ul>
     </div>
 </template>

@@ -1,8 +1,9 @@
 
 class Post {
-    constructor (title, summary, content, game, date, likes, comment_count, image_link, id) {
+    constructor (title, summary, author, content, game, date, likes, comment_count, image_link, id) {
         this.title = title
         this.summary = summary
+        this.author = author
         this.content = content
         this.game = game
         this.date = date
@@ -23,6 +24,6 @@ export const postConverter = {
 
     fromFirestore: (snapshot, options) => {
         const data = snapshot.data(options)
-        return new Post(data.title, data.summary, data.content, data.game, data.date.seconds * 1000, data.likes, data.comment_count, data.image_link, snapshot.id )
+        return new Post(data.title, data.summary, data.author, data.content, data.game, data.date.seconds * 1000, data.likes, data.comment_count, data.image_link, snapshot.id )
     }
 }

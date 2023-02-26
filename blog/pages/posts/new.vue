@@ -1,5 +1,5 @@
 <template>
-    <div class="w-[700px]">
+    <div class="justify-center w-[700px] m-auto">
         <div class="flex flex-col gap-2 mx-auto my-4">
             <input
                 placeholder="Enter the Title"
@@ -103,8 +103,11 @@ const validation = async () => {
         alert("Link doesn't lead to a valid URL!");
     }
 
-    if (game.value === "") {
-        alert("Game is empty!");
+    //Checks if game name is in the database.
+    if (gamesList.value
+        .map((fbGame) => fbGame.data().name.toLowerCase())
+        .indexOf(game.value.toLowerCase()) == -1) {
+        alert("Game is Incorrect/Nonexistent!");
         validated = false;
     }
 
