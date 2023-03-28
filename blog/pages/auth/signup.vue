@@ -1,41 +1,51 @@
 <template>
-    <div class="flex h-screen">
-        <div class="m-auto flex flex-col">
-            <form @submit.prevent="login()" class="flex flex-col gap-2 mt-16">
+    <div class="flex h-screen bg-gray-800">
+        <div class="m-auto flex flex-col text-white">
+            <form
+                @submit.prevent="login()"
+                class="mt-16 flex flex-col gap-2"
+                v-if="false">
                 <input
                     type="email"
                     placeholder="Email"
                     v-model="email"
-                    class="p-2 rounded bg-charcoal-600" />
+                    class="bg-charcoal-600 rounded p-2" />
                 <input
                     type="password"
                     placeholder="Password"
                     v-model="password"
-                    class="p-2 rounded bg-charcoal-600" />
+                    class="bg-charcoal-600 rounded p-2" />
                 <button
                     type="submit"
-                    class="p-2 font-medium bg-green-500 rounded hover:bg-green-400">
+                    class="rounded bg-green-500 p-2 font-medium hover:bg-green-400">
                     <span v-if="isSignUp"> Sign up </span>
                     <span v-else> Log in </span>
                 </button>
+                <button
+                    @click="isSignUp = !isSignUp"
+                    class="mt-8 w-full text-center text-sm text-slate-300 underline">
+                    <span v-if="isSignUp">
+                        Have an account? Log in instead
+                    </span>
+                    <span v-else> Create a new account </span>
+                </button>
             </form>
-            <button
-                @click="isSignUp = !isSignUp"
-                class="w-full mt-8 text-sm text-center underline text-slate-300">
-                <span v-if="isSignUp"> Have an account? Log in instead </span>
-                <span v-else> Create a new account </span>
-            </button>
-            <button class="bg-blue-500 rounded-lg" @click="useGoogleSignIn">
+
+            <h1 class="text-3xl">Welcome To Racketeer</h1>
+            
+            <button class="rounded-lg bg-blue-500 text-white" @click="useGoogleSignIn">
                 <a> Sign In With Google </a>
             </button>
-            <button @click="getCurrentUser">hi</button>
-            <button @click="useSignOutUser">Bye</button>
         </div>
     </div>
 </template>
 
 <script setup>
 import { GoogleAuthProvider, getAdditionalUserInfo } from "@firebase/auth";
+
+definePageMeta({
+    layout: "none",
+});
 
 const isSignUp = ref(false);
 const email = ref("");
@@ -98,11 +108,6 @@ const usePasswordCreateAccount = () => {
         });
 };
 
-const useSignOutUser = async () => {
-    const result = await auth.signOut();
-    return result;
-};
-
 const createUserObjectIfNotExists = async (result) => {
     const { isNewUser } = getAdditionalUserInfo(result);
     if (isNewUser) {
@@ -110,7 +115,13 @@ const createUserObjectIfNotExists = async (result) => {
             username: result.user.displayName,
             email: result.user.email,
             liked_posts: [],
+            about: "I'm a new user!",
+            profile_picture:
+                "https://brightspotcdn.byu.edu/dims4/default/e74744e/2147483647/strip/true/crop/340x340+0+0/resize/200x200!/quality/90/?url=https%3A%2F%2Fbrigham-young-brightspot.s3.amazonaws.com%2Fbd%2F7f%2Face2612141aa8c6ad180b0786739%2Fdefault-pfp.jpg",
         });
+        navigateTo(`/posts/users/${result.user.uid}`);
+    } else {
+        navigateTo("/");
     }
 };
 </script>

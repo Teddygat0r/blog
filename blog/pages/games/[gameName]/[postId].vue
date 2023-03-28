@@ -1,16 +1,18 @@
 <template>
     <div class="my-2 px-1 flex gap-10 w-full justify-center" v-if="postObject">
-        <div class="bg-slate-100 px-10 py-4 rounded-lg w-[700px] ">
-            <div class="m-auto">
-                <h1 class="text-center text-4xl">{{ postObject.title }}</h1>
-                <br/>
-                <hr/>
-                <br/>
+        <div class="flex flex-col gap-5">
+            <div class="bg-slate-100 px-10 py-4 rounded-lg w-[700px] ">
+                <div class="m-auto">
+                    <h1 class="text-center text-4xl">{{ postObject.title }}</h1>
+                    <br/>
+                    <hr/>
+                    <br/>
+                </div>
+                <div class="m-auto">
+                    <article v-html="postObject.content" class="prose"></article>
+                </div>
             </div>
-            <div class="m-auto">
-                <article v-html="postObject.content" class="prose"></article>
-            </div>
-            <CommentBox />
+            <CommentBox :postId="postObject.id"/>
         </div>
         <div
             class="hidden h-20 w-[200px] flex-shrink md:block"

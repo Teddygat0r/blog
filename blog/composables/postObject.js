@@ -1,15 +1,16 @@
 
 class Post {
-    constructor (title, summary, author, content, game, date, likes, comment_count, image_link, id) {
-        this.title = title
-        this.summary = summary
+    constructor (author, comment_count, comments, content, date, game, image_link, likes, summary, title, id) {
         this.author = author
-        this.content = content
-        this.game = game
-        this.date = date
-        this.likes = likes
         this.comment_count = comment_count
+        this.comments = comments
+        this.content = content
+        this.date = date
+        this.game = game
         this.image_link = image_link
+        this.likes = likes
+        this.summary = summary
+        this.title = title
         this.id = id
     }
     toString() {
@@ -24,6 +25,6 @@ export const postConverter = {
 
     fromFirestore: (snapshot, options) => {
         const data = snapshot.data(options)
-        return new Post(data.title, data.summary, data.author, data.content, data.game, data.date.seconds * 1000, data.likes, data.comment_count, data.image_link, snapshot.id )
+        return new Post(data.author, data.comments.length, data.comments, data.content, data.date.seconds * 1000, data.game, data.image_link, data.likes, data.summary, data.title, snapshot.id )
     }
 }

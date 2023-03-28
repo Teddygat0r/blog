@@ -16,7 +16,6 @@
                         v-for="post in postObjects"
                         v-bind="post"
                         :key="post.id">
-                        <p>{{ post }}</p>
                     </PostCard>
                 </div>
             </div>
