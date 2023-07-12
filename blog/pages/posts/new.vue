@@ -3,12 +3,12 @@
         <div class="flex flex-col gap-2 mx-auto my-4">
             <input
                 placeholder="Enter the Title"
-                class="w-full rounded-md p-2 text-2xl"
+                class="w-full p-2 text-2xl rounded-md"
                 maxLength="120"
                 v-model="postTitle" />
             <input
                 placeholder="Your summary"
-                class="w-full rounded-md p-2"
+                class="w-full p-2 rounded-md"
                 maxLength="240"
                 v-model="postSummary" />
 
@@ -17,12 +17,12 @@
         <div class="w-full mx-auto mb-4">
             <input
                 placeholder="Image url"
-                class="w-full rounded-md p-2"
+                class="w-full p-2 rounded-md"
                 v-model="image_link" />
         </div>
-        <div class="flex justify-between container w-full">
+        <div class="container flex justify-between w-full">
             <input
-                class="my-auto px-2 py-2 rounded-md"
+                class="px-2 py-2 my-auto rounded-md"
                 v-model="game"
                 id="autoComplete"
                 type="search"
@@ -34,7 +34,7 @@
                 placeholder="Enter your game" />
 
             <button
-                class="text-white bg-cyan-600 px-5 py-2 rounded-lg hover:ring-2 transition ease-in-out"
+                class="px-5 py-2 text-white transition ease-in-out rounded-lg bg-cyan-600 hover:ring-2"
                 @click="publishPost()">
                 Publish!
             </button>
@@ -128,7 +128,7 @@ const publishPost = async () => {
     if (await validation()) {
         await addDoc(collection(myDb(), "posts"), {
             author: doc(myDb(), "users", myAuth().currentUser.uid),
-            comment_count: 0,
+            comments: [],
             content: sanitizeHtml(postBody.value),
             date: Timestamp.fromMillis(Date.now()),
             game: await setPostGame(),
